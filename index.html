@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترجم زیرنویس با هوش مصنوعی</title>
+    <!-- فونت‌های مورد نیاز -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <style>
+        :root {
+            --primary-color: #3f51b5;
+            --primary-light: #757de8;
+            --primary-dark: #002984;
+            --secondary-color: #f50057;
+            --error-color: #f44336;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #757575;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title .material-icons {
+            margin-left: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d1004a;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #3d8b40;
+        }
+
+        .btn .material-icons {
+            margin-left: 8px;
+            font-size: 18px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload.active {
+            border-color: var(--primary-color);
+            background-color: rgba(63, 81, 181, 0.05);
+        }
+
+        .file-upload .material-icons {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .file-upload p {
+            color: var(--text-secondary);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 20px 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-left: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .subtitle-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .subtitle-item.error {
+            border-color: var(--error-color);
+            border-width: 2px;
+            background-color: rgba(244, 67, 54, 0.05);
+        }
+
+        .subtitle-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle-id {
+            background-color: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-left: 10px;
+        }
+
+        .subtitle-time {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            font-size: 0.8rem;
+        }
+
+        .subtitle-time-start {
+            color: var(--primary-color);
+        }
+
+        .subtitle-time-end {
+            color: var(--secondary-color);
+        }
+
+        .subtitle-time-separator {
+            margin: 0 5px;
+        }
+
+        .subtitle-text {
+            font-family: monospace;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-size: 0.9rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-icon {
+            margin-left: 10px;
+        }
+
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--warning-color);
+            color: var(--warning-color);
+        }
+
+        .alert-info {
+            background-color: rgba(63, 81, 181, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-container {
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: 10px;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* بهینه‌سازی برای موبایل */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .button-group .btn {
+                width: 100%;
+            }
+
+            .file-upload {
+                padding: 20px;
+            }
+            
+            .file-upload .material-icons {
+                font-size: 36px;
+            }
+            
+            .tab-button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* کلاس‌های کمکی */
+        .mt-2 { margin-top: 10px; }
+        .mb-2 { margin-bottom: 10px; }
+        .ml-2 { margin-left: 10px; }
+        .mr-2 { margin-right: 10px; }
+        .p-2 { padding: 10px; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .hidden { display: none; }
+        .flex { display: flex; }
+        .flex-between { justify-content: space-between; }
+        .flex-center { justify-content: center; }
+        .flex-align-center { align-items: center; }
+        .flex-wrap { flex-wrap: wrap; }
+        .gap-2 { gap: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>مترجم زیرنویس با هوش مصنوعی</h1>
+            <p>ترجمه زیرنویس‌های SRT با استفاده از Google Gemini و Router AI</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title">
+                <span class="material-icons">vpn_key</span>
+                تنظیمات API
+            </h2>
+            <div class="form-group">
+                <label for="geminiApiKey">کلید API گوگل Gemini:</label>
+                <div style="display: flex;">
+                    <input type="password" id="geminiApiKey" placeholder="کلید API خود را وارد کنید...">
+                    <button class="btn btn-icon ml-2" id="toggleGeminiKey">
+                        <span class="material-icons">visibility</span>
+                    </button>
+                </div>
+                <small style="display: block; margin-top: 5px; color: var(--text-secondary);">
+                    کلید API را می‌توانید از <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a> دریافت کنید.
+                </small>
+            </div>
+            
+            <div class="form-group">
+                <label for="routerApiKey">کلید API روتر AI (اختیاری):</label>
+                <div style="display: flex;">
+                    <input type="password" id="routerApiKey" placeholder="برای کیفیت بهتر ترجمه...">
+                    <button class="btn btn-icon ml-2" id="toggleRouterKey">
+                        <span class="material-icons">visibility</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="geminiModel">انتخاب مدل Gemini:</label>
+                <select id="geminiModel">
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash (سریع، مناسب برای متن‌های کوتاه)</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro (دقیق، مناسب برای متن‌های طولانی)</option>
+                    <option value="gemini-1.0-pro">Gemini 1.0 Pro (نسخه قدیمی‌تر)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">
+                <span class="material-icons">settings</span>
+                تنظیمات ترجمه
+            </h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="targetLanguage">زبان مقصد:</label>
+                    <select id="targetLanguage">
+                        <option value="fa">فارسی</option>
+                        <option value="en">انگلیسی</option>
+                        <option value="ar">عربی</option>
+                        <option value="fr">فرانسوی</option>
+                        <option value="de">آلمانی</option>
+                        <option value="es">اسپانیایی</option>
+                        <option value="ru">روسی</option>
+                        <option value="zh">چینی</option>
+                        <option value="ja">ژاپنی</option>
+                        <option value="ko">کره‌ای</option>
+                        <option value="tr">ترکی</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-group mt-2">
+                        <input type="checkbox" id="preserveTags" checked>
+                        <label for="preserveTags">حفظ تگ‌های HTML در متن زیرنویس</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            
+            <h3 style="font-size: 1rem; margin-bottom: 15px;">تنظیمات پیشرفته ترجمه</h3>
+            
+            <div class="grid">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="adjustTiming" checked>
+                    <label for="adjustTiming">اصلاح زمان‌بندی با توجه به طول ترجمه</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="preserveFormatting" checked>
+                    <label for="preserveFormatting">حفظ فرمت‌بندی اصلی متن</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="preserveNames" checked>
+                    <label for="preserveNames">شناسایی و حفظ اسامی خاص</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="autoValidate" checked>
+                    <label for="autoValidate">اعتبارسنجی خودکار زیرنویس‌ها</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">
+                <span class="material-icons">file_upload</span>
+                انتخاب فایل زیرنویس
+            </h2>
+            
+            <label for="subtitleFile" class="file-upload" id="fileDropArea">
+                <span class="material-icons">cloud_upload</span>
+                <p>فایل زیرنویس SRT خود را انتخاب کنید یا اینجا رها کنید</p>
+                <input type="file" id="subtitleFile" accept=".srt">
+            </label>
+            
+            <div id="fileInfo" class="hidden">
+                <div class="alert alert-info">
+                    <span class="material-icons alert-icon">info</span>
+                    <div>
+                        <div id="fileName"></div>
+                        <div id="fileDetails" style="font-size: 0.8rem; color: var(--text-secondary);"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" id="translateBtn" disabled>
+                    <span class="material-icons">translate</span>
+                    شروع ترجمه
+                </button>
+                
+                <button class="btn btn-secondary" id="clearBtn" disabled>
+                    <span class="material-icons">clear</span>
+                    پاک کردن
+                </button>
+            </div>
+        </div>
+
+        <div id="progressContainer" class="card hidden">
+            <h2 class="card-title">
+                <span class="material-icons">hourglass_top</span>
+                در حال ترجمه
+            </h2>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progressText">0%</span>
+                    <span id="progressStats">0/0 زیرنویس</span>
+                </div>
+            </div>
+            
+            <p id="currentSubtitleInfo" class="text-center" style="color: var(--text-secondary);">در انتظار شروع ترجمه...</p>
+        </div>
+
+        <div id="resultsContainer" class="card hidden">
+            <h2 class="card-title">
+                <span class="material-icons">done_all</span>
+                نتایج ترجمه
+            </h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="translatedTab">زیرنویس‌های ترجمه شده</button>
+                    <button class="tab-button" data-tab="originalTab">زیرنویس‌های اصلی</button>
+                    <button class="tab-button" data-tab="compareTab">مقایسه</button>
+                </div>
+                
+                <div id="translatedTab" class="tab-content active">
+                    <div id="translatedSubtitles"></div>
+                </div>
+                
+                <div id="originalTab" class="tab-content">
+                    <div id="originalSubtitles"></div>
+                </div>
+                
+                <div id="compareTab" class="tab-content">
+                    <div id="compareSubtitles"></div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-success" id="downloadBtn">
+                    <span class="material-icons">download</span>
+                    دانلود فایل زیرنویس ترجمه شده
+                </button>
+                
+                <button class="btn btn-primary" id="newTranslationBtn">
+                    <span class="material-icons">add</span>
+                    ترجمه جدید
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // متغیرهای اصلی برنامه
+        let originalSubtitles = [];
+        let translatedSubtitles = [];
+        let currentFileName = '';
+        let translationInProgress = false;
+        
+        // عناصر DOM
+        const fileInput = document.getElementById('subtitleFile');
+        const fileDropArea = document.getElementById('fileDropArea');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileDetails = document.getElementById('fileDetails');
+        const translateBtn = document.getElementById('translateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressStats = document.getElementById('progressStats');
+        const currentSubtitleInfo = document.getElementById('currentSubtitleInfo');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const translatedSubtitles = document.getElementById('translatedSubtitles');
+        const originalSubtitles = document.getElementById('originalSubtitles');
+        const compareSubtitles = document.getElementById('compareSubtitles');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const newTranslationBtn = document.getElementById('newTranslationBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const geminiApiKeyInput = document.getElementById('geminiApiKey');
+        const routerApiKeyInput = document.getElementById('routerApiKey');
+        const toggleGeminiKey = document.getElementById('toggleGeminiKey');
+        const toggleRouterKey = document.getElementById('toggleRouterKey');
+        const geminiModelSelect = document.getElementById('geminiModel');
+        const targetLanguageSelect = document.getElementById('targetLanguage');
+        const preserveTagsCheckbox = document.getElementById('preserveTags');
+        
+        // رویدادهای تب‌ها
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // فعال کردن دکمه تب
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // نمایش محتوای تب
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // نمایش/مخفی کردن کلیدهای API
+        toggleGeminiKey.addEventListener('click', function() {
+            const inputType = geminiApiKeyInput.type;
+            geminiApiKeyInput.type = inputType === 'password' ? 'text' : 'password';
+            toggleGeminiKey.innerHTML = inputType === 'password' 
+                ? '<span class="material-icons">visibility_off</span>' 
+                : '<span class="material-icons">visibility</span>';
+        });
+        
+        toggleRouterKey.addEventListener('click', function() {
+            const inputType = routerApiKeyInput.type;
+            routerApiKeyInput.type = inputType === 'password' ? 'text' : 'password';
+            toggleRouterKey.innerHTML = inputType === 'password' 
+                ? '<span class="material-icons">visibility_off</span>' 
+                : '<span class="material-icons">visibility</span>';
+        });
+        
+        // رویدادهای Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            fileDropArea.classList.add('active');
+        }
+        
+        function unhighlight() {
+            fileDropArea.classList.remove('active');
+        }
+        
+        fileDropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        }
+        
+        // رویداد انتخاب فایل
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        function handleFileSelect() {
+            if (fileInput.files.length === 0) return;
+            
+            const file = fileInput.files[0];
+            if (!file.name.endsWith('.srt')) {
+                alert('لطفاً یک فایل با پسوند .srt انتخاب کنید.');
+                fileInput.value = '';
+                return;
+            }
+            
+            currentFileName = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                originalSubtitles = parseSRT(content);
+                
+                // نمایش اطلاعات فایل
+                fileName.textContent = file.name;
+                fileDetails.textContent = `تعداد زیرنویس: ${originalSubtitles.length}`;
+                fileInfo.classList.remove('hidden');
+                
+                // فعال کردن دکمه‌ها
+                translateBtn.disabled = false;
+                clearBtn.disabled = false;
+            };
+            reader.readAsText(file);
+        }
+        
+        // پارس کردن فایل SRT
+        function parseSRT(content) {
+            const subtitles = [];
+            const blocks = content.trim().split(/\r?\n\r?\n/);
+            
+            blocks.forEach(block => {
+                const lines = block.split(/\r?\n/);
+                if (lines.length < 3) return;
+                
+                const id = parseInt(lines[0].trim());
+                const timeMatch = lines[1].match(/(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/);
+                
+                if (timeMatch) {
+                    const startTime = timeMatch[1];
+                    const endTime = timeMatch[2];
+                    const text = lines.slice(2).join('\n');
+                    
+                    subtitles.push({
+                        id,
+                        startTime,
+                        endTime,
+                        text
+                    });
+                }
+            });
+            
+            return subtitles;
+        }
+        
+        // پاک کردن اطلاعات
+        clearBtn.addEventListener('click', function() {
+            originalSubtitles = [];
+            translatedSubtitles = [];
+            currentFileName = '';
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            translateBtn.disabled = true;
+            clearBtn.disabled = true;
+        });
+        
+        // شروع ترجمه
+        translateBtn.addEventListener('click', startTranslation);
+        
+        async function startTranslation() {
+            const geminiApiKey = geminiApiKeyInput.value.trim();
+            if (!geminiApiKey) {
+                alert('لطفاً کلید API گوگل Gemini را وارد کنید.');
+                return;
+            }
+            
+            if (originalSubtitles.length === 0) {
+                alert('لطفاً ابتدا یک فایل زیرنویس انتخاب کنید.');
+                return;
+            }
+            
+            if (translationInProgress) {
+                alert('یک ترجمه در حال انجام است. لطفاً صبر کنید...');
+                return;
+            }
+            
+            // آماده‌سازی ترجمه
+            translationInProgress = true;
+            translatedSubtitles = [];
+            progressContainer.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            
+            updateProgress(0, originalSubtitles.length);
+            
+            // شروع ترجمه زیرنویس‌ها
+            let completedCount = 0;
+            const targetLanguage = targetLanguageSelect.value;
+            const preserveTags = preserveTagsCheckbox.checked;
+            const geminiModel = geminiModelSelect.value;
+            const routerApiKey = routerApiKeyInput.value.trim();
+            
+            for (let i = 0; i < originalSubtitles.length; i++) {
+                const subtitle = originalSubtitles[i];
+                
+                currentSubtitleInfo.textContent = `در حال ترجمه زیرنویس ${i+1} از ${originalSubtitles.length}...`;
+                
+                try {
+                    // ترجمه با گوگل Gemini
+                    let translatedText = await translateWithGemini(
+                        subtitle.text,
+                        targetLanguage,
+                        preserveTags,
+                        geminiApiKey,
+                        geminiModel
+                    );
+                    
+                    // اگر کلید Router AI موجود باشد، ترجمه را بهبود می‌دهیم
+                    if (routerApiKey) {
+                        translatedText = await enhanceTranslationWithRouterAI(
+                            subtitle.text,
+                            translatedText,
+                            targetLanguage,
+                            routerApiKey
+                        );
+                    }
+                    
+                    translatedSubtitles.push({
+                        ...subtitle,
+                        text: translatedText
+                    });
+                    
+                    completedCount++;
+                    updateProgress(completedCount, originalSubtitles.length);
+                    
+                    // کمی مکث برای پردازش
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                } catch (error) {
+                    console.error('خطا در ترجمه زیرنویس:', error);
+                    translatedSubtitles.push({
+                        ...subtitle,
+                        text: subtitle.text,
+                        error: true
+                    });
+                    
+                    completedCount++;
+                    updateProgress(completedCount, originalSubtitles.length);
+                }
+            }
+            
+            // اتمام ترجمه
+            translationInProgress = false;
+            currentSubtitleInfo.textContent = `ترجمه ${completedCount} زیرنویس از ${originalSubtitles.length} به پایان رسید.`;
+            
+            // نمایش نتایج
+            displayResults();
+        }
+        
+        // بروزرسانی پیشرفت ترجمه
+        function updateProgress(completed, total) {
+            const percentage = Math.floor((completed / total) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}%`;
+            progressStats.textContent = `${completed}/${total} زیرنویس`;
+        }
+        
+        // ترجمه با گوگل Gemini
+        async function translateWithGemini(text, targetLanguage, preserveTags, apiKey, model) {
+            // نمایش لودینگ
+            loadingOverlay.style.display = 'flex';
+            
+            try {
+                // آماده‌سازی پیام برای Gemini
+                let prompt = `Translate the following subtitle text from any language to ${getLanguageName(targetLanguage)}. `;
+                
+                if (preserveTags) {
+                    prompt += "Preserve all HTML tags and formatting exactly as they appear in the original text. ";
+                }
+                
+                prompt += "Only provide the translated text without any explanations or additional information.";
+                
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: prompt },
+                                { text: text }
+                            ]
+                        }]
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`خطا در ارتباط با API گوگل: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+                    return data.candidates[0].content.parts[0].text.trim();
+                } else {
+                    throw new Error('پاسخ نامعتبر از API گوگل');
+                }
+            } catch (error) {
+                console.error('خطا در ترجمه با Gemini:', error);
+                throw error;
+            } finally {
+                // مخفی کردن لودینگ
+                loadingOverlay.style.display = 'none';
+            }
+        }
+        
+        // بهبود ترجمه با Router AI
+        async function enhanceTranslationWithRouterAI(originalText, translatedText, targetLanguage, apiKey) {
+            try {
+                // آماده‌سازی پیام برای Router AI
+                const prompt = `
+                Original subtitle: "${originalText}"
+                Current translation to ${getLanguageName(targetLanguage)}: "${translatedText}"
+                
+                Please improve the translation to make it more natural and accurate in ${getLanguageName(targetLanguage)}.
+                Only provide the improved translation without any explanations.
+                `;
+                
+                const response = await fetch('https://router-api.worldanvil.dev/api/v1/router', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-3-opus',
+                        prompt: prompt,
+                        max_tokens: 1000
+                    })
+                });
+                
+                if (!response.ok) {
+                    // اگر خطا داشت، از ترجمه اصلی استفاده می‌کنیم
+                    console.warn('خطا در ارتباط با Router AI. از ترجمه اصلی استفاده می‌شود.');
+                    return translatedText;
+                }
+                
+                const data = await response.json();
+                if (data.result) {
+                    return data.result.trim();
+                } else {
+                    // اگر پاسخ نامعتبر بود، از ترجمه اصلی استفاده می‌کنیم
+                    console.warn('پاسخ نامعتبر از Router AI. از ترجمه اصلی استفاده می‌شود.');
+                    return translatedText;
+                }
+            } catch (error) {
+                console.error('خطا در بهبود ترجمه با Router AI:', error);
+                // در صورت خطا، ترجمه اصلی را برمی‌گردانیم
+                return translatedText;
+            }
+        }
+        
+        // نمایش نتایج ترجمه
+        function displayResults() {
+            // تب زیرنویس‌های ترجمه شده
+            let translatedHtml = '';
+            translatedSubtitles.forEach((subtitle, index) => {
+                const hasError = subtitle.error;
+                const subtitleClass = hasError ? 'subtitle-item error' : 'subtitle-item';
+                
+                translatedHtml += `
+                <div class="${subtitleClass}">
+                    <div class="subtitle-header">
+                        <div class="subtitle-id">${subtitle.id}</div>
+                        <div class="subtitle-time">
+                            <span class="subtitle-time-start">${formatTime(subtitle.startTime)}</span>
+                            <span class="subtitle-time-separator">—</span>
+                            <span class="subtitle-time-end">${formatTime(subtitle.endTime)}</span>
+                        </div>
+                    </div>
+                    <div class="subtitle-text">${subtitle.text}</div>
+                    ${hasError ? '<div class="error-message" style="color: var(--error-color); margin-top: 10px;">خطا در ترجمه</div>' : ''}
+                </div>
+                `;
+            });
+            
+            translatedSubtitles.innerHTML = translatedHtml || '<p class="text-center">هیچ زیرنویسی موجود نیست</p>';
+            
+            // تب زیرنویس‌های اصلی
+            let originalHtml = '';
+            originalSubtitles.forEach(subtitle => {
+                originalHtml += `
+                <div class="subtitle-item">
+                    <div class="subtitle-header">
+                        <div class="subtitle-id">${subtitle.id}</div>
+                        <div class="subtitle-time">
+                            <span class="subtitle-time-start">${formatTime(subtitle.startTime)}</span>
+                            <span class="subtitle-time-separator">—</span>
+                            <span class="subtitle-time-end">${formatTime(subtitle.endTime)}</span>
+                        </div>
+                    </div>
+                    <div class="subtitle-text">${subtitle.text}</div>
+                </div>
+                `;
+            });
+            
+            originalSubtitles.innerHTML = originalHtml || '<p class="text-center">هیچ زیرنویسی موجود نیست</p>';
+            
+            // تب مقایسه
+            let compareHtml = '';
+            for (let i = 0; i < originalSubtitles.length; i++) {
+                const original = originalSubtitles[i];
+                const translated = translatedSubtitles[i] || { text: 'ترجمه نشده', error: true };
+                const hasError = translated.error;
+                
+                compareHtml += `
+                <div class="subtitle-item ${hasError ? 'error' : ''}">
+                    <div class="subtitle-header">
+                        <div class="subtitle-id">${original.id}</div>
+                        <div class="subtitle-time">
+                            <span class="subtitle-time-start">${formatTime(original.startTime)}</span>
+                            <span class="subtitle-time-separator">—</span>
+                            <span class="subtitle-time-end">${formatTime(original.endTime)}</span>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">متن اصلی:</label>
+                            <div class="subtitle-text">${original.text}</div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-secondary);">ترجمه:</label>
+                            <div class="subtitle-text">${translated.text}</div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+            
+            compareSubtitles.innerHTML = compareHtml || '<p class="text-center">هیچ زیرنویسی برای مقایسه موجود نیست</p>';
+            
+            // نمایش کانتینر نتایج
+            resultsContainer.classList.remove('hidden');
+        }
+        
+        // تبدیل فایل ترجمه شده به SRT
+        function generateSRT() {
+            let srtContent = '';
+            
+            translatedSubtitles.forEach(subtitle => {
+                srtContent += `${subtitle.id}\n`;
+                srtContent += `${subtitle.startTime} --> ${subtitle.endTime}\n`;
+                srtContent += `${subtitle.text}\n\n`;
+            });
+            
+            return srtContent;
+        }
+        
+        // دانلود فایل ترجمه شده
+        downloadBtn.addEventListener('click', function() {
+            if (translatedSubtitles.length === 0) {
+                alert('هیچ زیرنویس ترجمه شده‌ای برای دانلود وجود ندارد.');
+                return;
+            }
+            
+            const srtContent = generateSRT();
+            const blob = new Blob([srtContent], { type: 'text/plain;charset=utf-8' });
+            
+            const originalName = currentFileName;
+            const dotIndex = originalName.lastIndexOf('.');
+            const nameWithoutExt = dotIndex !== -1 ? originalName.substring(0, dotIndex) : originalName;
+            const targetLang = targetLanguageSelect.value;
+            const newFileName = `${nameWithoutExt}_${targetLang}.srt`;
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = newFileName;
+            downloadLink.click();
+            
+            URL.revokeObjectURL(downloadLink.href);
+        });
+        
+        // شروع ترجمه جدید
+        newTranslationBtn.addEventListener('click', function() {
+            originalSubtitles = [];
+            translatedSubtitles = [];
+            currentFileName = '';
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            translateBtn.disabled = true;
+            clearBtn.disabled = true;
+        });
+        
+        // توابع کمکی
+        
+        // تبدیل زمان به فرمت خوانا
+        function formatTime(timeString) {
+            if (!timeString) return '';
+            return timeString.replace(',', '.');
+        }
+        
+        // تبدیل کد زبان به نام کامل
+        function getLanguageName(langCode) {
+            const languages = {
+                'fa': 'Persian',
+                'en': 'English',
+                'ar': 'Arabic',
+                'fr': 'French',
+                'de': 'German',
+                'es': 'Spanish',
+                'ru': 'Russian',
+                'zh': 'Chinese',
+                'ja': 'Japanese',
+                'ko': 'Korean',
+                'tr': 'Turkish'
+            };
+            
+            return languages[langCode] || langCode;
+        }
+    </script>
+</body>
+</html>
